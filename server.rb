@@ -62,8 +62,12 @@ def make_poll code, name, alt
   save_json
 end
 
+$HEAD_TAGS = <<-HTML
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+HTML
+
 get '/' do
-  erb :index
+  erb :index, :locals => {:head_tags => $HEAD_TAGS}
 end
 
 get '/poll' do
@@ -71,7 +75,7 @@ get '/poll' do
 end
 
 get '/share/:code' do
-  erb :share
+  erb :share, :locals => {:head_tags => $HEAD_TAGS}
 end
 
 post '/new' do
@@ -96,7 +100,7 @@ get '/poll/:poll' do
     return "This poll has not been created/does not exist!"
   end
 
-  local = {:code => params[:poll]}
+  local = {:code => params[:poll], :head_tags => $HEAD_TAGS}
   local.merge! $polls[params[:poll]]
   erb :poll, :locals => local
 end
