@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= session[:name] %> | Lopper</title>
+  </head>
+  <body>
+    <h1><%= session[:name] %></h1>
+    <h2>Cast a Vote</h2>
+
+    <ul id="live"></ul>
+
+    <form id="cast" action="/cast" method="POST">
+      <input type="text" id="vote" placeholder="Vote for?"/>
+      <input type="submit" id="submit" value="Submit Vote" />
+    </form>
+
+    <% unless session[:alt] == true %>
+      <style>
+        #cast {
+          display: none;
+        }
+      </style>
+    <% end %>
+
+    <script src="/jquery.min.js"></script>
+    <script src="/poller.js"></script>
+  </body>
+</html>

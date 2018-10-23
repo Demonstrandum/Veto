@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lopper</title>
+  </head>
+  <body>
+    <h1>Make a poll</h1>
+
+    <form id="create" action="/new" method="POST">
+      <label>Title</label>
+      <input required type="text" name="title" id="title" placeholder="Name of your poll">
+
+      <br />
+      <label>Name in URL</label>
+      <input required type="text" name="code" id="code" placeholder="Code name">
+
+      <br />
+      <label>Allow 'other' option?</label>
+      <input type="checkbox" id="other" name="other">
+
+      <br />
+      Primary Options:
+      <ul id="options">
+        <input type="text" name="addition" id="addition" placeholder="...">
+      </ul>
+
+      <br />
+      <input id="submit-poll" type="submit" name="submit" value="Make Poll">
+    </form>
+
+
+    <script src="/jquery.min.js"></script>
+    <script src="/new.js"></script>
+    <script>
+      const add_list = option => {
+        let addition = $("#addition").detach();
+        addition.val('');
+        $("#options")
+          .append(`<li>${option}</li>`)
+          .append(addition);
+        addition.focus().select();
+      };
+
+      $("#addition").on('keypress', key => {
+        let value = $("#addition").val().trim();
+        let values = Array(...$('#options li').map((i, e) => e.innerHTML));
+        if (key.which === 13) {
+          key.preventDefault();
+          if (value.length > 0 && !values.includes(value))
+            add_list(value);
+        }
+      });
+    </script>
+    <script>
+      $("#title").on('input', () => {
+        $("#code").val(encodeURI($("#title").val().toLowerCase().replace(/\s/g, '-')));
+      });
+
+      $("#code").on('input', () => {
+        $("#code").val(encodeURI($("#code").val().replace(/\s/g, '-')));
+      });
+    </script>
+  </body>
+</html>
