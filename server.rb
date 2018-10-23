@@ -1,6 +1,5 @@
 require 'net/http'
 require 'json'
-require 'symbolized'
 
 require 'sinatra'
 
