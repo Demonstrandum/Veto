@@ -1,5 +1,8 @@
-require 'sinatra'
+require 'net/http'
+require 'json'
+require 'symbolized'
 
+require 'sinatra'
 
 set :run, true
 set :server, %w{ thin }
@@ -11,15 +14,40 @@ $polls = {
   'this-is-a-poll-name' => {
     :name => 'This is a poll name',
     :votes => {},
-    :alternatives => true
+    :alt => true,
+    :voters => []
   }
-}
+}  # Example.
+
+$JSON_ID = 's2abg'
+$JSON_BASE = 'https://api.myjson.com'
+
+String.class_eval { def to_uri; URI(self); end }
+$polls.default_proc = proc do |h, k|
+  case k
+    when String then sym = k.to_sym; h[sym] if h.key?(sym)
+    when Symbol then str = k.to_s; h[str] if h.key?(str)
+  end
+end
+
+def request_json
+  response = Net::HTTP.get "#{$JSON_BASE}/bins/#{$JSON_ID}".to_uri
+  $polls = JSON.parse response, {:symbolize_names => true}
+end
+
+def save_json
+  uri = "#{$JSON_BASE}/bins/#{$JSON_ID}".to_uri
+  req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+  req.body = $polls.to_json
+  Net::HTTP.start(uri.hostname, uri.port) { |http| http.request req }
+end
 
 def make_poll code, name, alt
   $polls[code] = {
     :name => name,
     :votes => {},
-    :alt => alt
+    :alt => alt,
+    :voters => []
   }
 end
 
@@ -57,11 +85,15 @@ get '/poll/:poll' do
     return "This poll has not been created/does not exist!"
   end
 
-  session.merge! $polls[params[:poll]]
-  erb :poll
+  local = {:code => params[:poll]}
+  local.merge! $polls[params[:poll]]
+  erb :poll, :locals => local
 end
 
 post '/poll/:poll/cast' do
+  return nil if $polls[params[:poll]][:voters].include? request.ip
+  $polls[params[:poll]][:voters].push request.ip
+  
   if $polls[params[:poll]][:votes].keys.include? params[:vote]
     $polls[params[:poll]][:votes][params[:vote]][:number] += 1
   else
