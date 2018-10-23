@@ -16,6 +16,7 @@ const get_votes = () => {
 const cast_button = name => {
   $('#vote').val(name);
   $('#cast').submit();
+  $('#vote').val('');
   setTimeout(update_votes, 70);
 };
 

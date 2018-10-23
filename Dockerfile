@@ -1,6 +1,4 @@
-FROM ruby:2.5.2-alpine
-
-
+FROM ruby:2.5.0-alpine
 
 RUN apk update && apk --update --no-cache add libstdc++
 RUN apk --update --no-cache add --virtual .build_deps git g++ musl-dev make

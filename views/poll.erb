@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= session[:name] %> | Lopper</title>
+    <title><%= name %> | Lopper</title>
   </head>
   <body>
-    <h1><%= session[:name] %></h1>
+    <h1><%= name %></h1>
     <h2>Cast a Vote</h2>
 
     <ul id="live"></ul>
@@ -14,7 +14,7 @@
       <input type="submit" id="submit" value="Submit Vote" />
     </form>
 
-    <% unless session[:alt] == true %>
+    <% unless alt %>
       <style>
         #cast {
           display: none;
