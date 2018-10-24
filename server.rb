@@ -9,6 +9,8 @@ set :server, %w{ thin }
 set :port, 8080
 enable :sessions
 
+before { request.path_info.sub! %r{/$}, "" }
+
 $INDIFFERENT = proc do |h, k|
   case k
     when String then sym = k.to_sym; h[sym] if h.key?(sym)
@@ -17,7 +19,7 @@ $INDIFFERENT = proc do |h, k|
 end
 
 $polls = {
-  'this-is-a-poll-name' => {
+  :'this-is-a-poll-name' => {
     :name => 'This is a poll name',
     :votes => {},
     :alt => true,
@@ -63,7 +65,19 @@ def make_poll code, name, alt
 end
 
 $HEAD_TAGS = <<-HTML
-  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+  <link rel="stylesheet" type="text/css" href="/styles.css" />
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+  </script>
+  <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous">
+  </script>
 HTML
 
 get '/' do
@@ -122,6 +136,10 @@ end
 
 get '/poll/:poll/votes.json' do
   $polls[params[:poll]][:votes].to_json
+end
+
+get '/polls.json' do
+  $polls.keys.map(&:to_s).to_json
 end
 
 get '/exported.json' do

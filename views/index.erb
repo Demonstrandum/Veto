@@ -5,41 +5,70 @@
     <%= head_tags %>
   </head>
   <body>
-    <h1>Create a poll</h1>
+    <div class="container">
+      <div class="row">
+        <h1>Create a poll</h1>
+      </div>
 
-    <form id="create" action="/new" method="POST">
-      <label>Title</label>
-      <input required type="text" name="title" id="title" placeholder="Name of your poll">
+      <form id="create" action="/new" method="POST">
+        <div class="row">
+          <div class="six columns">
+            Poll Title
+          </div>
+          <div class="six columns in">
+            <input type="text" name="title" id="title" autocomplete="off" placeholder="Name of your poll">
+          </div>
+        </div>
 
-      <br />
-      <label>Name in URL</label>
-      <input required type="text" name="code" id="code" placeholder="Code name">
+        <div class="row">
+          <div class="three columns">
+            Poll URL name
+          </div>
+          <div class="three columns right">
+            <span class="url"><span>
+          </div>
+          <div class="six columns in">
+            <input type="text" name="code" id="code" autocomplete="off" placeholder="">
+          </div>
+        </div>
 
-      <br />
-      <label>Allow 'other' option?</label>
-      <input type="checkbox" id="other" name="other">
-
-      <br />
-      Primary Options:
-      <ul id="options">
-        <input type="text" name="addition" id="addition" placeholder="...">
-      </ul>
-
-      <br />
-      <input id="submit-poll" type="submit" name="submit" value="Make Poll">
-    </form>
+        <div class="row">
+          <div class="twelve columns" style="margin-bottom: 1em">
+            <input type="checkbox" checked id="other" name="other">
+            <label for="other" style="cursor: pointer">Allow 'other' option?</label>
+          </div>
+        </div>
 
 
-    <script src="/jquery.min.js"></script>
+        <div class="row">
+          <div class="twelve columns">
+            Primary Options/Choices:
+            <ul id="options">
+              <div class="option">
+                <input type="text" autocomplete="off" name="addition" id="addition" placeholder="...">
+                <input type="button" class="add-option" value="Add option">
+              </div>
+            </ul>
+          </div>
+        </div>
+
+
+        <br />
+        <input id="submit-poll" type="submit" name="submit" value="Make Poll">
+      </form>
+    </div>
+
+
+    <script src="/main.js"></script>
     <script src="/new.js"></script>
     <script>
       const add_list = option => {
-        let addition = $("#addition").detach();
-        addition.val('');
+        $('#addition').val('');
+        let adder = $(".option").detach();
         $("#options")
           .append(`<li>${option}</li>`)
-          .append(addition);
-        addition.focus().select();
+          .append(adder);
+        $('#addition').focus().select();
       };
 
       $("#addition").on('keypress', key => {
@@ -47,9 +76,28 @@
         let values = Array(...$('#options li').map((i, e) => e.innerHTML));
         if (key.which === 13) {
           key.preventDefault();
-          if (value.length > 0 && !values.includes(value))
-            add_list(value);
+          if (value.length === 0) {
+            return $('#addition').attention();
+          }
+          if (values.includes(value)) {
+            issue(ISSUE.FATAL, `Cannot have duplicate (primary) options/choices!`);
+            return $('#addition').attention();
+          }
+          return add_list(value);
         }
+      });
+      $('.add-option').click(() => {
+        let value = $("#addition").val().trim();
+        let values = Array(...$('#options li').map((i, e) => e.innerHTML));
+        if (value.length === 0) {
+          return $('#addition').attention();
+        }
+        if (values.includes(value)) {
+          issue(ISSUE.FATAL, `Cannot have duplicate (primary) options/choices!`);
+          return $('#addition').attention();
+        }
+
+        return add_list(value);
       });
     </script>
     <script>
