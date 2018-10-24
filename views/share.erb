@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Share Poll</title>
+    <%= head_tags %>
   </head>
   <body>
     <div>
@@ -11,7 +12,7 @@
     </div>
 
 
-    <script src="/jquery.min.js"></script>
+    <script src="/main.js"></script>
     <script>
       $("#share").append(`${window.location.protocol}//${window.location.host}/poll/<%= params[:code] %>`)
     </script>

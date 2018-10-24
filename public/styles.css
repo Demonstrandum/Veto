@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,500');
+@import url('//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+.container {
+  margin-top: 30px;
+}
+
+ul {
+  padding-left: 40px;
+  margin: 10px 0;
+}
+
+#options {
+  margin: 20px 0;
+}
+
+#options li {
+  margin-top: 20px;
+}
+
+label {
+  font-weight: normal;
+}
+
+input[type=button], button {
+  padding: 0;
+  margin: 0 15px;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #aaa;
+  height: 36px;
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+input[type=text] {
+  font-size: 1em;
+  padding: 0;
+  border: none;
+  border-radius: 0px;
+  border-bottom: 1px solid #aaa;
+  transition: all .15s ease;
+}
+
+input[type=text]:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #aaa;
+}
+
+input[type=checkbox] { display:none; }
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+input[type=checkbox] + label:before { content: "\f096"; }
+input[type=checkbox] + label:before { letter-spacing: 10px; }
+
+input[type=checkbox]:checked + label:before { content: "\f046"; }
+input[type=checkbox]:checked + label:before { letter-spacing: 8px; }
+
+#code {
+  color: #aaa;
+}
+
+.problem:focus {
+  outline: none;
+  border: 1px solid #900;
+  background: #ffd8d2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.57em;
+}
+
+.in {
+  margin-left: 0;
+  margin-top: -7px;
+}
+
+.in input {
+  width: 100%;
+}
+
+#addition {
+  margin-left: 22px;
+}
+
+.right {
+  text-align: right;
+}
+
+.url {
+  font-size: 1em;
+  color: #aaa;
+}
+
+.issues {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.issues div > * {
+  padding: 10px 15px;
+  margin: 0;
+}
+
+.issues div {
+  height: 0;
+  width: 15em;
+  opacity: 0;
+  margin: 10px;
+  border-radius: 5px;
+  border-left: 8px solid;
+  transition: all .2s ease-out;
+  overflow: hidden;
+}
+
+.issues p {
+  font-size: 0.8em;
+  width: auto;
+  border-top:    2px solid;
+  border-bottom: 2px solid;
+}
+
+.issues .show {
+  height: auto;
+  opacity: 1;
+}
+
+.issues .error {
+  background: #ffc8b3;
+  border-color: #ff5436;
+  color: #800;
+}
+
+.issues .error p {
+  background: #ffd8d2;
+  border-color: #faa;
+}
+
+.issues .warning {
+  background: #ffeab3;
+  border-color: #ffc136;
+  color: #885a00;
+}
+
+.issues .warning p {
+  background: #fff0d2;
+  border-color: #ffe2aa;
+}
