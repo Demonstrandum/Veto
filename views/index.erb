@@ -72,7 +72,7 @@
         $("#options")
           .append(`
             <li class="option-item">
-              <span>${option}</span>
+              <span class="value">${option}</span>
               <div class="symbols">
                 <i class="option-edit far fa-edit"></i>
                 <i class="option-remove fas fa-times"></i>
@@ -105,7 +105,11 @@
       };
 
       $(document).on('click', e => {
-        if (!$(e.target).hasClass('editor') && !$(e.target).hasClass('option-item')) {
+        if (!( $(e.target).hasClass('editor')
+            || $(e.target).hasClass('option-item')
+            || $(e.target).hasClass('fa-save')
+            || $(e.target).hasClass('value')
+          )) {
           save();
           editing = NaN;
         }
@@ -124,12 +128,10 @@
 
       $('#options').on('click', 'li', e => {
         if (e.target.nodeName === 'INPUT') return;
-        const li = $(e.currentTarget);
-        console.log(li.index());
+        let li = $(e.currentTarget);
         save();
 
         if (editing !== li.index()) {
-          console.log('not same click');
           editing = li.index();
           edit_mode(li);
         } else {
