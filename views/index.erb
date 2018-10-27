@@ -35,7 +35,7 @@
         <div class="row">
           <div class="twelve columns" style="margin-bottom: 1em">
             <input type="checkbox" checked id="other" name="other">
-            <label for="other" style="cursor: pointer">
+            <label for="other" style="cursor: pointer; user-select: none;">
               Allow 'other' option, i.e. alternative choices?
             </label>
           </div>
@@ -64,19 +64,84 @@
     <script src="/main.js"></script>
     <script src="/new.js"></script>
     <script>
+      let editing = NaN;
+
       const add_list = option => {
         $('#addition').val('');
         let adder = $(".option").detach();
         $("#options")
-          .append(`<li>${option}</li>`)
+          .append(`
+            <li class="option-item">
+              <span>${option}</span>
+              <div class="symbols">
+                <i class="option-edit far fa-edit"></i>
+                <i class="option-remove fas fa-times"></i>
+              </div>
+            </li>
+          `)
           .append(adder);
         $('#addition').focus().select();
       };
 
+
+      $('#options').on('click', '.option-remove', e => {
+        const li = $(e.target).closest('li');
+        li.slideUp(100, function() { $(this).remove(); });
+        console.warn(li[0], 'Element been removed!');
+      });
+
+      const save = () => {
+        const inputs = $('#options li').children('input');
+
+        inputs.each(function() {
+          const value = this.value;
+          $(this).parent('li').removeClass('dark-option');
+          $(this).siblings('span').show().text(value);
+          $(this).siblings('.symbols').find('.option-edit')
+            .removeClass('fa-save')
+            .addClass('fa-edit');
+          this.remove();
+        });
+      };
+
+      $(document).on('click', e => {
+        if (!$(e.target).hasClass('editor') && !$(e.target).hasClass('option-item')) {
+          save();
+          editing = NaN;
+        }
+      });
+
+      const edit_mode = li => {
+        const span = li.find('span');
+        span.hide();
+        li.addClass('dark-option');
+        li.find('.option-edit')
+          .removeClass('fa-edit')
+          .addClass('fa-save');
+        li.prepend(`<input class="editor" type="text" value="${span.text()}" />`);
+        li.find('input').focus().select();
+      };
+
+      $('#options').on('click', 'li', e => {
+        if (e.target.nodeName === 'INPUT') return;
+        const li = $(e.currentTarget);
+        console.log(li.index());
+        save();
+
+        if (editing !== li.index()) {
+          console.log('not same click');
+          editing = li.index();
+          edit_mode(li);
+        } else {
+          editing = NaN;
+        }
+      });
+
       $("#addition").on('keypress', key => {
         let value = $("#addition").val().trim();
-        let values = Array(...$('#options li').map((i, e) => e.innerHTML));
+        let values = Array(...$('#options li span').map((i, e) => e.innerHTML));
         if (key.which === 13) {
+          save();
           key.preventDefault();
           if (value.length === 0) {
             return $('#addition').attention();
@@ -89,8 +154,9 @@
         }
       });
       $('.add-option').click(() => {
+        save();
         let value = $("#addition").val().trim();
-        let values = Array(...$('#options li').map((i, e) => e.innerHTML));
+        let values = Array(...$('#options li span').map((i, e) => e.innerHTML));
         if (value.length === 0) {
           return $('#addition').attention();
         }
@@ -104,11 +170,11 @@
     </script>
     <script>
       $("#title").on('input', () => {
-        $("#code").val(encodeURI($("#title").val().toLowerCase().replace(/\s/g, '-')));
+        $("#code").val(encodeURI($("#title").val().toLowerCase().replace(/\s|\//g, '-')));
       });
 
       $("#code").on('input', () => {
-        $("#code").val(encodeURI($("#code").val().replace(/\s/g, '-')));
+        $("#code").val(encodeURI($("#code").val().replace(/\s|\//g, '-')));
       });
     </script>
   </body>

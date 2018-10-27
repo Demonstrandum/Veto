@@ -10,7 +10,7 @@ $('document').ready(() => {
         name: $('#title').val().trim(),
         code: $('#code').val(),
         alt:  $('#other').is(':checked'),
-        primary: Array(...$('#options li').map((i, e) => e.innerHTML))
+        primary: Array(...$('#options li span').map((i, e) => e.innerHTML))
       },
       success: () => {
         console.info('New poll made.');
@@ -19,6 +19,7 @@ $('document').ready(() => {
     return false;
   });
   $('#submit-poll').click(() => {
+    save();  // Save all changes
     let polls = [];
     $.ajax({
       async: false,
@@ -41,7 +42,7 @@ $('document').ready(() => {
       issue(ISSUE.FATAL, `
         The poll link name (the name in the URL) cannot be left blank.
       `);
-    } else if (!$('#other').is(':checked') && Array(...$('#options li').map((i, e) => e.innerHTML)).length === 0) {
+    } else if (!$('#other').is(':checked') && Array(...$('#options li span').map((i, e) => e.innerHTML)).length === 0) {
       $('#addition').attr('placeholder', 'Add at least 1 option.').attention();
       issue(ISSUE.WARN, `
         Unless you allow for 'other' options,

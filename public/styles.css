@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,500');
-@import url('//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css');
+@import url('https://use.fontawesome.com/releases/v5.4.1/css/all.css');
 
 html, body {
   margin: 0;
@@ -10,7 +10,7 @@ html, body {
   overflow-x: hidden;
 }
 
-body {
+html {
   overflow-y: scroll;
 }
 
@@ -28,11 +28,84 @@ ul {
 }
 
 #options li {
+  padding: 5px 10px;
   margin-top: 20px;
+  border-radius: 5px;
+  background: #fff;
+  transition: all .1s ease;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+#options li input {
+  background: #111;
+  color: #eee;
+  border-bottom: 2px solid #222;
+  padding: 0 5px;
+  margin: 0;
+  display: inline-block;
+  height: 1.6em;
+  line-height: 0px;
+  margin: 0;
+  border-radius: 2px;
+}
+
+#options li:nth-of-type(2n) {
+  background: #f2f2f2;
+}
+
+#options li:hover {
+  background: #222;
+  color: #fff;
+}
+
+.dark-option {
+  background: #000 !important;
+  color: #fff;
+}
+
+#options li span {
+  vertical-align: middle;
+  border-bottom: 2px solid transparent;
+}
+
+#options li .symbols {
+  vertical-align: middle;
+  float: right;
+  font-size: 0.8em;
+}
+
+#options li .symbols i {
+  margin: 0 0 0 3px;
+  padding: 7px;
+  vertical-align: middle;
+  transition: all .15s ease;
+}
+
+#options li .symbols i:hover {
+  color: #999;
 }
 
 label {
   font-weight: normal;
+}
+
+input[type=submit] {
+  font-weight: normal;
+  border-color: #000;
+  color: #fff;
+  background: #000;
+  transition: all .1s ease;
+}
+
+input[type=submit]:hover {
+  background: #1a1a1a;
+  color: #ddd;
+}
+
+input[type=submit]:focus {
+  background: #555;
+  color: #888;
 }
 
 input[type=button], button {
@@ -85,6 +158,7 @@ input[type=checkbox]:checked + label:before { letter-spacing: 8px; }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
+  color: #000;
 }
 
 h3 {
@@ -93,7 +167,7 @@ h3 {
 
 .in {
   margin-left: 0;
-  margin-top: -7px;
+  margin-top: -6px;
 }
 
 .in input {
@@ -101,7 +175,7 @@ h3 {
 }
 
 #addition {
-  margin-left: 22px;
+  margin-left: 32px;
 }
 
 .right {
@@ -114,7 +188,7 @@ h3 {
 }
 
 .issues {
-  position: absolute;
+  position: fixed;
   right: 15px; /* Scroll bar */
   bottom: 0;
   overflow: hidden;
@@ -126,13 +200,13 @@ h3 {
 }
 
 .issues div {
-  height: 0;
+  max-height: 0;
   width: 15em;
   opacity: 0;
   margin: 10px;
   border-radius: 5px;
   border-left: 8px solid;
-  transition: all .2s ease-out;
+  transition: all .4s ease-out;
   overflow: hidden;
 }
 
@@ -144,7 +218,7 @@ h3 {
 }
 
 .issues .show {
-  height: auto;
+  max-height: 300px;
   opacity: 1;
 }
 
