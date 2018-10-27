@@ -217,6 +217,10 @@ h3 {
   border-bottom: 2px solid;
 }
 
+.issues h3 {
+  color: inherit;
+}
+
 .issues .show {
   max-height: 300px;
   opacity: 1;
@@ -225,7 +229,7 @@ h3 {
 .issues .error {
   background: #ffc8b3;
   border-color: #ff5436;
-  color: #800;
+  color: #800 !important;
 }
 
 .issues .error p {
@@ -236,7 +240,7 @@ h3 {
 .issues .warning {
   background: #ffeab3;
   border-color: #ffc136;
-  color: #885a00;
+  color: #885a00 !important;
 }
 
 .issues .warning p {
