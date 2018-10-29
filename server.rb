@@ -22,18 +22,26 @@ end
 def make_poll code, name, alt
   alt = alt.to_s == 'true'
   poll = {
-    :code => code,
-    :name => name,
-    :votes => {},
-    :alt => alt,
-    :voters => []
+    :code   =>  code,
+    :name   =>  name,
+    :votes  =>  {},
+    :alt    =>  alt,
+    :voters =>  []
   }
   POLLS.insert_one poll
 end
 
-$HEAD_TAGS = <<-HTML
+HEAD_TAGS = <<-HTML
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#303030" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
@@ -52,7 +60,7 @@ $HEAD_TAGS = <<-HTML
 HTML
 
 get '/' do
-  erb :index, :locals => {:head_tags => $HEAD_TAGS}
+  erb :index, :locals => {:head_tags => HEAD_TAGS}
 end
 
 get '/poll' do
@@ -60,7 +68,7 @@ get '/poll' do
 end
 
 get '/share/:code' do
-  erb :share, :locals => {:head_tags => $HEAD_TAGS}
+  erb :share, :locals => {:head_tags => HEAD_TAGS}
 end
 
 post '/new' do
@@ -85,22 +93,24 @@ end
 
 get '/poll/:poll' do
   unless poll_exist? params[:poll]
-    return "This poll has not been created/does not exist!"
+    status 404
+    return erb :oops, :locals => {:head_tags => HEAD_TAGS}
   end
 
-  local = {:code => params[:poll], :head_tags => $HEAD_TAGS}
+  local = {:code => params[:poll], :head_tags => HEAD_TAGS}
   local.merge! Hash.from_bson POLLS.find({:code => params[:poll]}).first.to_bson
   erb :poll, :locals => local
 end
 
 post '/poll/:poll/cast' do
+  params[:vote].gsub! '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
   return nil if POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
   POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}})
 
   if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} })
     POLLS.update_one({:code => params[:poll]}, { :"$inc" => { :"votes.#{params[:vote]}.number" => 1 } })
   else
-    POLLS.update_one({:code => params[:poll]}, {:"$set" => {:"vote.#{params[:vote]}" => {
+    POLLS.update_one({:code => params[:poll]}, { :"$set" => { :"vote.#{params[:vote]}" => {
       :number => 1,
       :primary => false
     }}})
@@ -113,4 +123,16 @@ end
 
 get '/polls.json' do
   POLLS.find.to_a.map { |doc| doc[:code] }.to_json
+end
+
+get '/poll/:poll/has-voted' do
+  (POLLS.find(:"$and" => [
+    {:code   => params[:poll]},
+    {:voters => request.ip   }
+  ]).to_a.size > 0).to_s
+end
+
+not_found do
+  status 404
+  erb :oops, :locals => {:head_tags => HEAD_TAGS}
 end
