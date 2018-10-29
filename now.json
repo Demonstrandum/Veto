@@ -1,5 +1,8 @@
 {
   "name": "Veto",
   "alias": "veto.vote",
-  "type": "docker"
+  "type": "docker",
+  "env": {
+    "MONGO_DB": "@mongo_url_secret"
+  }
 }

@@ -1,4 +1,4 @@
-require 'net/http'
+require 'mongo'
 require 'json'
 
 require 'sinatra'
@@ -11,57 +11,24 @@ enable :sessions
 
 before { request.path_info.sub! %r{/$}, "" }
 
-$INDIFFERENT = proc do |h, k|
-  case k
-    when String then sym = k.to_sym; h[sym] if h.key?(sym)
-    when Symbol then str = k.to_s; h[str] if h.key?(str)
-  end
+# ENV['MONGO_DB'] variable with Now secrets, or just in your shell if local.
+CLIENT = Mongo::Client.new "#{ENV['MONGO_DB']}/Veto"
+POLLS = CLIENT[:polls]
+
+def poll_exist? code
+  POLLS.find({:code => code}).to_a.size > 0
 end
-
-$polls = {
-  :'this-is-a-poll-name' => {
-    :name => 'This is a poll name',
-    :votes => {},
-    :alt => true,
-    :voters => []
-  }
-}  # Example.
-
-$JSON_ID = '1arifg'
-$JSON_BASE = 'https://api.myjson.com'
-
-String.class_eval { def to_uri; URI(self); end }
-$polls.default_proc = $INDIFFERENT
-
-def request_json
-  puts "[!!] Requesting JSON, ID: #{$JSON_ID}"
-  response = Net::HTTP.get "#{$JSON_BASE}/bins/#{$JSON_ID}".to_uri
-  $polls = JSON.parse response, {:symbolize_names => true}
-  $polls.default_proc = $INDIFFERENT
-  pp $polls
-end
-
-def save_json
-  puts "[!!] Saving JSON, ID: #{$JSON_ID}"
-  uri = "#{$JSON_BASE}/bins/#{$JSON_ID}".to_uri
-  puts "[!!]\tURI: #{uri}"
-  req = Net::HTTP::Put.new uri
-  req.set_content_type 'application/json'
-  req.body = $polls.to_json
-  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request req }
-  puts "[!!]\tResponse: #{res.inspect}"
-end
-
-request_json  # Initial JSON retrieval
 
 def make_poll code, name, alt
-  $polls[code] = {
+  alt = alt.to_s == 'true'
+  poll = {
+    :code => code,
     :name => name,
     :votes => {},
     :alt => alt,
     :voters => []
   }
-  save_json
+  POLLS.insert_one poll
 end
 
 $HEAD_TAGS = <<-HTML
@@ -97,7 +64,7 @@ get '/share/:code' do
 end
 
 post '/new' do
-  return nil if $polls.keys.include? params[:code]
+  return nil if poll_exist? params[:code]
 
   make_poll(
     params[:code],
@@ -105,47 +72,45 @@ post '/new' do
     params[:alt])
 
   params[:primary].each do |option|
-    $polls[params[:code]][:votes][option] = {
-      :number => 0,
-      :primary => true
-    }
+    POLLS.update_one({:code => params[:code]}, {
+      :"$set" => {
+        :"votes.#{option}" => {
+          :number => 0,
+          :primary => true
+        }
+      }
+    })
   end
-  save_json
 end
 
 get '/poll/:poll' do
-  unless $polls.keys.map(&:to_s).include? params[:poll]
+  unless poll_exist? params[:poll]
     return "This poll has not been created/does not exist!"
   end
 
   local = {:code => params[:poll], :head_tags => $HEAD_TAGS}
-  local.merge! $polls[params[:poll]]
+  local.merge! Hash.from_bson POLLS.find({:code => params[:poll]}).first.to_bson
   erb :poll, :locals => local
 end
 
 post '/poll/:poll/cast' do
-  return nil if $polls[params[:poll]][:voters].include? request.ip
-  $polls[params[:poll]][:voters].push request.ip
+  return nil if POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
+  POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}})
 
-  if $polls[params[:poll]][:votes].keys.include? params[:vote]
-    $polls[params[:poll]][:votes][params[:vote]][:number] += 1
+  if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} })
+    POLLS.update_one({:code => params[:poll]}, { :"$inc" => { :"votes.#{params[:vote]}.number" => 1 } })
   else
-    $polls[params[:poll]][:votes][params[:vote]] = {
+    POLLS.update_one({:code => params[:poll]}, {:"$set" => {:"vote.#{params[:vote]}" => {
       :number => 1,
       :primary => false
-    }
+    }}})
   end
-  save_json
 end
 
 get '/poll/:poll/votes.json' do
-  $polls[params[:poll]][:votes].to_json
+  (Hash.from_bson POLLS.find({:code => params[:poll]}).to_a.first.to_bson)[:votes].to_json
 end
 
 get '/polls.json' do
-  $polls.keys.map(&:to_s).to_json
-end
-
-get '/exported.json' do
-  $polls.to_json
+  POLLS.find.to_a.map { |doc| doc[:code] }.to_json
 end
