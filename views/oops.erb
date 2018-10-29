@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>404 - Veto</title>
+    <%= head_tags %>
+    <style media="screen">
+      @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+
+      .container {
+        width: 24em;
+      }
+
+      .container p:nth-of-type(2) {
+        color: #555;
+      }
+      h2 {
+        font-size: 4rem
+      }
+      h3 {
+        text-align: center;
+      }
+      h3 span {
+        font-family: 'Roboto Mono', monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Oops.</h1>
+      <h2>That's a 404.</h2>
+
+      <h3>
+        <span>`<%= request.url.split('//')[-1] %>'</span>
+        <br />
+        does not exist.
+      </h3>
+      <p>
+        We don't recognise this URL, perhaps you've entered the URL
+        incorrectly or you've been given a wrong link.
+      </p>
+      <p>
+        If you believe this link should be correct, and the webservice is
+        at fault, please email me
+        at <u>moi@knutsen.co</u> with deatils of the problem.
+      </p>
+    </div>
+  </body>
+</html>

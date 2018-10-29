@@ -103,7 +103,7 @@ input[type=submit]:hover {
   color: #ddd;
 }
 
-input[type=submit]:focus {
+input[type=submit]:active {
   background: #555;
   color: #888;
 }

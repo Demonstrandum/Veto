@@ -180,11 +180,11 @@
     </script>
     <script>
       $("#title").on('input', () => {
-        $("#code").val(encodeURI($("#title").val().toLowerCase().replace(/\s|\//g, '-')));
+        $("#code").val(encodeURIComponent($("#title").val().toLowerCase().replace(/\s|\//g, '-')));
       });
 
-      $("#code").on('input', () => {
-        $("#code").val(encodeURI($("#code").val().replace(/\s|\//g, '-')));
+      $('#code')[0].addEventListener('keyup', e => {
+        $("#code").val(encodeURIComponent($("#code").val().replace(/[^A-Za-z\d\-\.\!\']/g, '-')));
       });
     </script>
   </body>
