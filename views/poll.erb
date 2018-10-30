@@ -3,7 +3,13 @@
   <head>
     <title><%= name %> | Veto</title>
     <%= head_tags %>
+    <script type="text/javascript">
+      let other_allowed = true;
+    </script>
     <% unless alt %>
+      <script type="text/javascript">
+        other_allowed = false;
+      </script>
       <style>
         .others {
           display: none;
@@ -11,11 +17,6 @@
       </style>
     <% end %>
     <style media="screen">
-      .chart-area {
-        background: #ccc;
-        outline: 1px solid #aaa;
-      }
-
       table {
         width: 100%;
         border-collapse:separate;
@@ -89,6 +90,18 @@
       .caster:active {
         background: #aaa;
       }
+
+      .chart-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      canvas {
+        /*border: 1px solid #f9f9f9;
+        background: #fff;
+        border-radius: 4px;
+        filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));*/
+      }
     </style>
   </head>
   <body>
@@ -100,7 +113,7 @@
           <table id="primary" class="live"></table>
         </div>
         <div class="five columns chart-area">
-          <h1>PIE CHART</h1>
+          <canvas id="pie" width="100%"></canvas>
         </div>
       </div>
 
@@ -115,10 +128,74 @@
           </form>
         </div>
         <div class="six columns chart-area">
-          <h1>BAR CHART</h1>
+          <canvas id="bar" width="100%"></canvas>
         </div>
       </div>
+      <br />
 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js" charset="utf-8"></script>
+      <script type="text/javascript">
+        Chart.defaults.global.elements.arc.borderColor = '#ddd';
+        const ALPHA_RANGE = {
+          min: 0.08,
+          max: 1
+        }
+
+        const chart_colors = chart => {
+          const range = ALPHA_RANGE;
+          const N = chart.data.datasets[0].data.length;
+          backgrounds = Array(N);
+          for (let mono = range.min; mono <= range.max; mono += range.max / (N + 1))
+            backgrounds[Math.round((mono - range.min) * N / range.max)] = `rgba(0,0,0,${mono})`;
+          chart.data.datasets[0].backgroundColor = backgrounds;
+          console.log(backgrounds);
+          return backgrounds;
+        };
+
+        const chart_empty = chart => {
+          chart.data.labels = [];
+          chart.data.datasets[0].data = [];
+        };
+
+        const push_data = (chart, label, data) => {
+          chart.data.labels.push(label);
+          chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(data);
+          });
+          chart_colors(chart);
+        }
+
+        $(document).ready(() => {
+          for (const canvas of ['#pie', '#bar']) {
+            const context = $(canvas)[0];
+            const dimension = $(canvas).closest('div').innerWidth() - 22;
+            context.height = dimension;
+            context.width = dimension;
+          }
+        });
+      </script>
+      <script type="text/javascript">
+        // PIE CHART:
+        let pie;
+        $(document).ready(() => {
+          const context = $('#pie');
+
+          pie = new Chart(context, {
+            type: 'pie',
+            data: {
+              labels: [],
+              datasets: [{
+                label: '# of Votes',
+                data: [],
+                backgroundColor: [],
+              }]
+            },
+            options: {
+
+            }
+          });
+        });
+      </script>
 
       <script src="/main.js"></script>
       <script src="/poller.js"></script>

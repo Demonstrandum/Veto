@@ -56,6 +56,7 @@ const total_other = votes => (
 );
 
 const update_votes = () => {
+  chart_empty(pie);
   const votes = get_votes(POLL_CODE);
   $('#primary').empty();
   $('#primary').append(`
@@ -77,6 +78,7 @@ const update_votes = () => {
   `);
   for (const name of Object.keys(votes)) {
     if (votes[name].primary) {
+      push_data(pie, name, votes[name].number);
       $('#primary').append(`
         <tr>
           <td class="vote-name">${name}</td>
@@ -96,6 +98,9 @@ const update_votes = () => {
       `)
     }
   }
+  if (other_allowed)
+    push_data(pie, 'Other', Math.round(total_other(votes)));
+  pie.update();
 };
 
 const cast_button = name => {
