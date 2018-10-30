@@ -104,8 +104,8 @@ end
 
 post '/poll/:poll/cast' do
   params[:vote].gsub! '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
-  return nil if POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
-  POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}})
+  return nil if request.ip != '::1' && POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
+  POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}}) unless request.ip == '::1'
 
   if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} })
     POLLS.update_one({:code => params[:poll]}, { :"$inc" => { :"votes.#{params[:vote]}.number" => 1 } })
