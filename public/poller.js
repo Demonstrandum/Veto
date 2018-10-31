@@ -103,7 +103,7 @@ const update_votes = () => {
       `)
     }
   }
-  if (other_allowed && enough_other) {
+  if (other_allowed) {
     $('#bar').show();
     push_data(pie, 'Other', Math.round(total_other(votes)));
     bar.options.scales.xAxes[0].ticks.min = -1 + Math.min(...(
