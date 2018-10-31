@@ -22,11 +22,12 @@ end
 def make_poll code, name, alt
   alt = alt.to_s == 'true'
   poll = {
-    :code   =>  code,
-    :name   =>  name,
-    :votes  =>  {},
-    :alt    =>  alt,
-    :voters =>  []
+    :code    =>  code,
+    :name    =>  name,
+    :votes   =>  {},
+    :alt     =>  alt,
+    :voters  =>  [],
+    :created =>  Time.now
   }
   POLLS.insert_one poll
 end
@@ -72,6 +73,7 @@ get '/share/:code' do
 end
 
 post '/new' do
+  params[:code] = URI.decode params[:code]
   return nil if poll_exist? params[:code]
 
   make_poll(
@@ -84,7 +86,8 @@ post '/new' do
       :"$set" => {
         :"votes.#{option}" => {
           :number => 0,
-          :primary => true
+          :primary => true,
+          :date => Time.now
         }
       }
     })
@@ -107,12 +110,13 @@ post '/poll/:poll/cast' do
   return nil if request.ip != '::1' && POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
   POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}}) unless request.ip == '::1'
 
-  if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} })
+  if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} }).to_a.size > 0
     POLLS.update_one({:code => params[:poll]}, { :"$inc" => { :"votes.#{params[:vote]}.number" => 1 } })
   else
-    POLLS.update_one({:code => params[:poll]}, { :"$set" => { :"vote.#{params[:vote]}" => {
+    POLLS.update_one({:code => params[:poll]}, { :"$set" => { :"votes.#{params[:vote]}" => {
       :number => 1,
-      :primary => false
+      :primary => false,
+      :date => Time.now
     }}})
   end
 end

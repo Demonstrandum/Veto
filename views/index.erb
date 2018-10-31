@@ -180,7 +180,7 @@
     </script>
     <script>
       $("#title").on('input', () => {
-        $("#code").val(encodeURIComponent($("#title").val().toLowerCase().replace(/\s|\//g, '-')));
+        $("#code").val(encodeURIComponent($("#title").val().toLowerCase().replace(/\s|\\|\//g, '-')));
       });
 
       $('#code')[0].addEventListener('keyup', e => {

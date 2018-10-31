@@ -58,6 +58,9 @@ const total_other = votes => (
 const update_votes = () => {
   chart_empty(pie);
   const votes = get_votes(POLL_CODE);
+  const enough_other = (Object.values(votes).filter(v => !v.primary)).length > 1;
+  if (Object.values(votes).filter(v => v.primary).length === 0)
+    $('.primary').css({display: 'none'});
   $('#primary').empty();
   $('#primary').append(`
     <tr>
@@ -67,6 +70,7 @@ const update_votes = () => {
       <th>Cast</th>
     </tr>
   `);
+  chart_empty(bar);
   $('#other').empty();
   $('#other').append(`
     <tr>
@@ -83,23 +87,36 @@ const update_votes = () => {
         <tr>
           <td class="vote-name">${name}</td>
           <td class="number" >${votes[name].number}</td>
-          <td class="precent">${dp(100 * votes[name].number / total_vote(votes))}</td>
-          <td class="cast"><button class="caster" name="${name}" onclick="cast_button('${name}')">Vote</button></td>
+          <td class="percent">${dp(100 * votes[name].number / total_vote(votes))}</td>
+          <td class="cast"><button class="caster" name="${name}" onclick="cast_button('${name.replace(/\'/g, '\\\'')}')">Vote</button></td>
         </tr>
       `);
     } else {
+      push_data(bar, name, votes[name].number)
       $('#other').append(`
         <tr>
           <td class="vote-name">${name}</td>
           <td class="number" >${votes[name].number}</td>
-          <td class="precent">${dp(100 * votes[name].number / total_vote(votes))}</td>
-          <td class="cast"><button class="caster" name="${name}" onclick="cast_button('${name}')">Vote</button></td>
+          <td class="percent">${dp(100 * votes[name].number / total_vote(votes))}</td>
+          <td class="cast"><button class="caster" name="${name}" onclick="cast_button('${name.replace(/\'/g, '\\\'')}')">Vote</button></td>
         </tr>
       `)
     }
   }
-  if (other_allowed)
+  if (other_allowed && enough_other) {
+    $('#bar').show();
     push_data(pie, 'Other', Math.round(total_other(votes)));
+    bar.options.scales.xAxes[0].ticks.min = -1 + Math.min(...(
+      Object.values(votes)
+        .filter(v => !v.primary)
+        .map(v => v.number)
+    ));
+    bar.update();
+  }
+  if (!enough_other) {
+    $('#bar').hide()
+  }
+  chart_colors(pie);
   pie.update();
 };
 
@@ -120,7 +137,6 @@ $('document').ready(() => {
     url: POLL_CODE + '/has-voted',
     async: false,
     success: data => {
-      console.info('Has already voted?: ', data);
       if (data === "true") disable_vote();
     }
   });
