@@ -3,20 +3,112 @@
   <head>
     <title>Share Poll</title>
     <%= head_tags %>
+    <style media="screen">
+      body {
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      h3 {
+        margin: 10px 0;
+      }
+      p {
+        margin: 10px 0;
+      }
+      a, i {
+        padding: 5px 10px;
+        filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.1));
+        border: 1px solid #eee;
+        border-radius: 4px;
+        background: #fff;
+        color: #777;
+        transition: all .1s ease;
+      }
+      a:hover {
+        color: #444;
+      }
+
+      i {
+        cursor: grab;
+        color: #aaa;
+        padding: 0.43em 10px;
+        margin-left: 6px;
+        position: relative;
+        display: inline-block;
+      }
+      i:hover {
+        color: #666;
+      }
+
+      i span {
+        visibility: hidden;
+        width: 120px;
+        background: rgba(0,0,0,0.8);
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+
+        position: absolute;
+        z-index: 1;
+        width: 120px;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+        font-family: Rubik;
+        font-size: 0.7em;
+      }
+
+      i:hover span {
+        visibility: visible;
+      }
+
+      i span::after {
+        content: " ";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+      }
+      i:active {
+        cursor: copy;
+      }
+      input {
+        position: absolute;
+        right: -300vw;
+      }
+    </style>
   </head>
   <body>
     <div>
-      <p>Share:
-        <a id="share" href=""></a>
-      </p>
+      <h3>Share</h3>
+      <p>Share the link with others, press the copy-paste button.</p>
+      <a id="share" href=""><%= params[:code] %></a>
+      <i class="far fa-copy"><span>Copy to Clipboard.</span></i>
+      <input type="text" value="" />
     </div>
 
 
     <script src="/main.js"></script>
     <script>
+      $('i').click(() => {
+        const text = $('#share').text();
+        $('input').val(text);
+        $('input')[0].select();
+        document.execCommand("copy");
+        $('i span').text('Copied!');
+        setTimeout(() => $('i span').text('Copy to Clipboard.'), 700);
+      });
+      const code = $('#share').text();
       $("#share")
-        .attr('href', `/poll/${encodeURIComponent("<%= params[:code] %>")}`)
-        .append(`${window.location.protocol}//${window.location.host}/poll/${encodeURIComponent("<%= params[:code] %>")}`)
+        .attr('href', `/poll/${encodeURIComponent(code)}`)
+        .text(`${window.location.protocol}//${window.location.host}/poll/${encodeURIComponent(code)}`)
     </script>
   </body>
 </html>
