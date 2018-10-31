@@ -7,14 +7,16 @@
   <body>
     <div>
       <p>Share:
-        <a id="share" href="/poll/<%= params[:code] %>"></a>
+        <a id="share" href=""></a>
       </p>
     </div>
 
 
     <script src="/main.js"></script>
     <script>
-      $("#share").append(`${window.location.protocol}//${window.location.host}/poll/<%= params[:code] %>`)
+      $("#share")
+        .attr('href', `/poll/${encodeURIComponent("<%= params[:code] %>")}`)
+        .append(`${window.location.protocol}//${window.location.host}/poll/${encodeURIComponent("<%= params[:code] %>")}`)
     </script>
   </body>
 </html>

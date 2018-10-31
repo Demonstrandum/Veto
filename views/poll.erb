@@ -108,7 +108,7 @@
     <div class="container">
       <h1><%= name %></h1>
 
-      <div class="row">
+      <div class="row primary">
         <div class="seven columns">
           <table id="primary" class="live"></table>
         </div>
@@ -162,7 +162,6 @@
           chart.data.datasets.forEach((dataset) => {
             dataset.data.push(data);
           });
-          chart_colors(chart);
         }
 
         $(document).ready(() => {
@@ -175,23 +174,59 @@
         });
       </script>
       <script type="text/javascript">
-        // PIE CHART:
+        // CHARTS:
         let pie;
+        let bar;  // Make sure they're global.
         $(document).ready(() => {
-          const context = $('#pie');
+          const pie_context = $('#pie');
 
-          pie = new Chart(context, {
+          pie = new Chart(pie_context[0], {
             type: 'pie',
             data: {
               labels: [],
               datasets: [{
-                label: '# of Votes',
+                label: '№	of Votes',
+                data: [],
+                backgroundColor: [],
+              }]
+            },
+            options: {}
+          });
+
+          const bar_context = $('#bar')
+          bar = new Chart(bar_context[0], {
+            type: 'horizontalBar',
+            data: {
+              labels: [],
+              datasets: [{
+                label: '№	of Votes',
                 data: [],
                 backgroundColor: [],
               }]
             },
             options: {
-
+              title: {
+                display: true,
+                text: 'Distribution of alternative/other votes.'
+              },
+              scales: {
+                yAxes: [{
+                  categoryPercentage: 0.9,
+                  barPercentage: 1.0,
+                  ticks: {
+                    mirror: true,
+                    padding: -10,
+                  }
+                }],
+                xAxes: [{
+                  ticks: {
+                    stepSize: 1
+                  }
+                }]
+              },
+              legend: {
+                display: false,
+              }
             }
           });
         });
