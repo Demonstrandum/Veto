@@ -64,9 +64,14 @@
         background: #d7d7d7;
       }
       .row {
-        display: flex;
+        display: block;
         align-items: center;
         justify-content: center;
+      }
+      @media (min-width:550px) {
+        .row {
+          display: flex;
+        }
       }
       .row .columns {
         height: 100%;
