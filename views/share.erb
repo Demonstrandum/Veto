@@ -4,7 +4,7 @@
     <title>Share Poll</title>
     <%= head_tags %>
     <style media="screen">
-      body, html {
+      body, html, body > div {
         overflow: hidden;
         overflow-x: hidden;
         overflow-y: hidden;
@@ -15,6 +15,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      body > div {
+        padding: 0 5px 15px 5px;
       }
       h3 {
         margin: 10px 0;
@@ -86,7 +89,6 @@
       input[type=text] {
         position: absolute;
         right: -300vw;
-        visibility: hidden;
       }
     </style>
   </head>

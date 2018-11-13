@@ -92,7 +92,10 @@
 
       const save = () => {
         const inputs = $('#options li').children('input');
-        let values = Array(...$('#options li span').map((i, e) => e.innerHTML));
+        let values = Array(...$('#options li span')
+                      .filter((i, e) => e.style.display !== 'none')
+                      .map((i, e) => e.innerHTML));
+        console.log(values);
 
         let bad_input = null;
         inputs.each(function() {
