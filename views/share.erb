@@ -4,12 +4,17 @@
     <title>Share Poll</title>
     <%= head_tags %>
     <style media="screen">
+      body, html {
+        width: 100%;
+        height: 100%;
+      }
       body, html, body > div {
-        overflow: hidden;
+        overflow: hidden !important;
         overflow-x: hidden;
         overflow-y: hidden;
       }
       body {
+        position: fixed;
         width: 100vw;
         height: 100vh;
         display: flex;
