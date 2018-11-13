@@ -22,7 +22,7 @@
         justify-content: center;
       }
       body > div {
-        padding: 0 5px 15px 5px;
+        padding: 0 40px 20px 40px;
       }
       h3 {
         margin: 10px 0;
@@ -112,8 +112,24 @@
       $('i').click(() => {
         const text = $('#share').text();
         $('input').val(text);
-        $('input')[0].select();
+        const elem = $('input')[0];
+        const range = document.createRange();
+
+        elem.contentEditable = true;
+        elem.readOnly = false;
+        range.selectNodeContents(elem);
+
+        const s = window.getSelection();
+        s.removeAllRanges();
+        s.addRange(range);
+
+        elem.setSelectionRange(0, 999999);
+
+        if (!navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+          elem.select();
+        }
         document.execCommand("copy");
+
         $('i span').text('Copied!');
         setTimeout(() => $('i span').text('Copy to Clipboard.'), 700);
       });
