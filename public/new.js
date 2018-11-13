@@ -19,7 +19,11 @@ $('document').ready(() => {
     return false;
   });
   $('#submit-poll').click(() => {
-    save();  // Save all changes
+    // Save all changes.
+    if (!save()) {
+      return false;
+    }
+
     let polls = [];
     $.ajax({
       async: false,
