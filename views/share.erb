@@ -4,8 +4,12 @@
     <title>Share Poll</title>
     <%= head_tags %>
     <style media="screen">
-      body {
+      body, html {
         overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
+      }
+      body {
         width: 100vw;
         height: 100vh;
         display: flex;
@@ -79,9 +83,10 @@
       i:active {
         cursor: copy;
       }
-      input {
+      input[type=text] {
         position: absolute;
         right: -300vw;
+        visibility: hidden;
       }
     </style>
   </head>
