@@ -111,9 +111,9 @@ post '/poll/:poll/cast' do
   return nil if request.ip != '::1' && POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
   POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}}) unless request.ip == '::1'
 
-  if POLLS.find({ :"votes.#{params[:vote]}" => {"$exists": true} }).to_a.size > 0
+  if POLLS.find({ :"$and" => [{:code => params[:poll]}, { :"votes.#{params[:vote]}" => {"$exists": true}}] }).to_a.size > 0
     POLLS.update_one({:code => params[:poll]}, { :"$inc" => { :"votes.#{params[:vote]}.number" => 1 } })
-  else
+  elsif POLLS.find({:code => params[:poll]}).first[:alt]
     POLLS.update_one({:code => params[:poll]}, { :"$set" => { :"votes.#{params[:vote]}" => {
       :number => 1,
       :primary => false,

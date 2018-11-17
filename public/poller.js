@@ -156,7 +156,7 @@ $('document').ready(() => {
       },
       error: e => {
         issue(ISSUE.FATAL, `
-          An erro occured while casting your vote.\n
+          An error occurred while casting your vote.\n
           More Information:\n
           ${e}
         `);

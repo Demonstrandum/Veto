@@ -12,7 +12,7 @@
       </script>
       <style>
         .others {
-          display: none;
+          display: none !important;
         }
       </style>
     <% end %>
@@ -162,7 +162,6 @@
           for (let mono = range.min; mono <= range.max; mono += range.max / (N + 1))
             backgrounds[Math.round((mono - range.min) * N / range.max)] = `rgba(0,0,0,${mono})`;
           chart.data.datasets[0].backgroundColor = backgrounds;
-          console.log(backgrounds);
           return backgrounds;
         };
 
