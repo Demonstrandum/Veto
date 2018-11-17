@@ -36,6 +36,26 @@ HEAD_TAGS = <<-HTML
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Search Engine -->
+  <meta name="description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="image" content="https://veto.vote/square.png">
+  <!-- Schema.org for Google -->
+  <meta itemprop="name" content="Veto Vote — Straw Polls">
+  <meta itemprop="description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta itemprop="image" content="https://veto.vote/square.png">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Veto Vote — Straw Polls">
+  <meta name="twitter:description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="twitter:image:src" content="https://veto.vote/square.png">
+  <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+  <meta name="og:title" content="Veto Vote — Straw Polls">
+  <meta name="og:description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="og:image" content="https://veto.vote/card.pmg">
+  <meta name="og:url" content="https://veto.vote/">
+  <meta name="og:site_name" content="Veto Vote — Straw Polls">
+  <meta name="og:type" content="website">
+
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
