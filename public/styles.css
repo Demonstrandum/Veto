@@ -22,6 +22,21 @@ ul {
   margin: 10px 0;
 }
 
+.github {
+  opacity: 0.6;
+  transition: all .15s ease;
+  margin: 0 1em;
+}
+.github:hover {
+  opacity: 1;
+}
+.github img {
+  cursor: pointer;
+  display: inline-block;
+  height: 1.2em;
+  vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
+}
 #options {
   margin: 20px 0;
 }
@@ -119,6 +134,7 @@ input[type=button], button {
 }
 
 input[type=text] {
+  background: transparent;
   font-size: 1em;
   padding: 0;
   border: none;

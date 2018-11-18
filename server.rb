@@ -35,6 +35,16 @@ end
 HEAD_TAGS = <<-HTML
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129403871-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-129403871-1');
+  </script>
 
   <!-- Search Engine -->
   <meta name="description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
