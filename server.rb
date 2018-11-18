@@ -51,7 +51,7 @@ HEAD_TAGS = <<-HTML
   <!-- Open Graph general (Facebook, Pinterest & Google+) -->
   <meta name="og:title" content="Veto Vote — Straw Polls">
   <meta name="og:description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
-  <meta name="og:image" content="https://veto.vote/card.pmg">
+  <meta name="og:image" content="https://veto.vote/card.png">
   <meta name="og:url" content="https://veto.vote/">
   <meta name="og:site_name" content="Veto Vote — Straw Polls">
   <meta name="og:type" content="website">
