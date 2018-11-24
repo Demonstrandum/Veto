@@ -1,6 +1,7 @@
-body > .content:first-child {
+body > .container:first-child {
   min-height: calc(100vh - 8em);
 }
+
 table {
   width: 100%;
   border-collapse:separate;
