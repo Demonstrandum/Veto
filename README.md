@@ -1,6 +1,7 @@
 # Veto
 Simple polling site writen in Ruby, using Sinatra.
 
+![2018-11-20-182258_1366x768_scrot](https://user-images.githubusercontent.com/26842759/48796535-cc17f700-ecf7-11e8-9167-eef5c086fe6e.png)
 # Running Locally
 First of all, one need the Ruby programming language installed. One can install this from the official [Ruby Website](https://www.ruby-lang.org/en/) or one'll most likely have it available through one's main package manager.
 
@@ -51,6 +52,7 @@ One should see Sinatra take the stage with backup from Thin, (their words). If n
 Otherwise, one should be fine, now one can access [localhost:8080](http://localhost:8080/), and one can make any changes locally. One only needs to restart the server if one has made changes to the `server.rb` file, otherwise any changes to any other .erb, .js, .css files, etc. should not require a restart.
 
 
+![2018-11-20-182338_1366x768_scrot](https://user-images.githubusercontent.com/26842759/48796534-cc17f700-ecf7-11e8-8cf5-5f073f411e44.png)
 
 ## Welp
 Someone help me make it look pretty. I'm too lazy to write heaps of CSS again
