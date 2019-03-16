@@ -32,10 +32,16 @@ def make_poll code, name, alt
   POLLS.insert_one poll
 end
 
+class String
+  def pseudo_dot!
+    self.gsub! '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
+  end
+end
+
 HEAD_TAGS = <<-HTML
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129403871-1"></script>
   <script>
@@ -115,7 +121,7 @@ post '/new' do
   params[:primary].each do |option|
     POLLS.update_one({:code => params[:code]}, {
       :"$set" => {
-        :"votes.#{option}" => {
+        :"votes.#{option.pseudo_dot!}" => {
           :number => 0,
           :primary => true,
           :date => Time.now
@@ -137,7 +143,7 @@ get '/poll/:poll' do
 end
 
 post '/poll/:poll/cast' do
-  params[:vote].gsub! '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
+  params[:vote].pseudo_dot!
   return nil if request.ip != '::1' && POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
   POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}}) unless request.ip == '::1'
 
