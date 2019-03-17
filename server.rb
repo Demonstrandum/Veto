@@ -33,8 +33,12 @@ def make_poll code, name, alt
 end
 
 class String
+  def pseudo_dot
+    self.gsub '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
+  end
+
   def pseudo_dot!
-    self.gsub! '.', "\u2024"  # Full-stop look-alike, since MongoDB uses dot notation.
+    replace pseudo_dot
   end
 end
 
@@ -121,7 +125,7 @@ post '/new' do
   params[:primary].each do |option|
     POLLS.update_one({:code => params[:code]}, {
       :"$set" => {
-        :"votes.#{option.pseudo_dot!}" => {
+        :"votes.#{option.pseudo_dot}" => {
           :number => 0,
           :primary => true,
           :date => Time.now
