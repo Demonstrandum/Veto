@@ -1,5 +1,5 @@
 $('document').ready(() => {
-  $('.url').text(`${window.location.protocol}//${window.location.host}/poll/`)
+  $('.url').text(`${window.location.host}/poll/`)
 
   $('#create').submit(() => {
     $.ajax({
