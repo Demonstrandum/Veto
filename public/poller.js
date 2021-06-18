@@ -140,7 +140,7 @@ const cast_button = name => {
 
 $('document').ready(() => {
   update_votes();
-  //setInterval(update_votes, 6000);  // Live view of votes.
+  setInterval(update_votes, 6000);  // Live view of votes.
 
   $.ajax({
     url: POLL_CODE + '/has-voted',
