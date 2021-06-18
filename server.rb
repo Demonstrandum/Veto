@@ -6,7 +6,7 @@ require 'sinatra'
 set :run, true
 set :server, %w{ thin }
 
-set :port, 8080
+set :port, 8088
 enable :sessions
 
 before { request.path_info.sub! %r{/$}, "" }
