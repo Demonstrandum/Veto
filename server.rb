@@ -114,7 +114,7 @@ get '/share/:code' do
 end
 
 post '/new' do
-  params[:code] = URI.decode params[:code]
+  params[:code] = URI.decode_www_form_component params[:code]
   return nil if poll_exist? params[:code]
 
   make_poll(
@@ -148,6 +148,11 @@ end
 
 post '/poll/:poll/cast' do
   params[:vote].pseudo_dot!
+  if params[:vote].strip.empty?
+    status 406
+    return "Cannot cast empty vote."
+  end
+
   return nil if request.ip != '::1' && POLLS.find(:"$and" => [{:code => params[:poll]}, {:voters => request.ip}]).to_a.size > 0
   POLLS.update_one({:code => params[:poll]}, {:"$push" => {:voters => request.ip}}) unless request.ip == '::1'
 

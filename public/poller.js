@@ -1,9 +1,18 @@
-const POLL_CODE = window.location.pathname.split('/').slice(-1);
-let has_voted = false;
+const getVarCSS = name =>
+  getComputedStyle(document.documentElement)
+    .getPropertyValue(`--${name}`)
+    .trim();
 
-const dp = (number, places = 2) => {
-  return Number.parseFloat(number).toFixed(2);
-}
+const dp = (number, places = 2) =>
+  Number.parseFloat(number).toFixed(2);
+
+const BASE = getVarCSS('fg-rgb');
+Chart.defaults.global.elements.arc.borderColor = `rgba(${BASE},0.1)`;
+Chart.defaults.global.defaultColor = `rgba(${BASE},0.1)`;
+
+const POLL_CODE = window.location.pathname.split('/').slice(-1);
+
+let has_voted = false;
 
 const disable_vote = () => {
   has_voted = true;
@@ -12,16 +21,16 @@ const disable_vote = () => {
     .val("You've already voted.")
     .prop('disabled', true)
     .css({
-      background: "#eee",
+      opacity: 0.5,
+      color: getVarCSS('fg'),
       padding: "0 10px"
     });
   $('#submit')
     .addClass('disabled')
     .prop('disabled', true)
     .css({
-      background: '#eee',
-      color: "#888",
-      border: "2px solid #aaa"
+      background: getVarCSS('fg'),
+      opacity: 0.7
     });
 };
 
@@ -131,7 +140,7 @@ const cast_button = name => {
 
 $('document').ready(() => {
   update_votes();
-  setInterval(update_votes, 1500);  // Live view of votes.
+  //setInterval(update_votes, 6000);  // Live view of votes.
 
   $.ajax({
     url: POLL_CODE + '/has-voted',
@@ -155,10 +164,11 @@ $('document').ready(() => {
         $('#submit').blur();
       },
       error: e => {
+        console.log(e);
         issue(ISSUE.FATAL, `
           An error occurred while casting your vote.\n
           More Information:\n
-          ${e}
+          ${e.responseText}
         `);
       }
     });

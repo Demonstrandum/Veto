@@ -1,4 +1,3 @@
-Chart.defaults.global.elements.arc.borderColor = '#ddd';
 const ALPHA_RANGE = {
   min: 0.08,
   max: 1
@@ -9,7 +8,7 @@ const chart_colors = chart => {
   const N = chart.data.datasets[0].data.length;
   backgrounds = Array(N);
   for (let mono = range.min; mono <= range.max; mono += range.max / (N + 1))
-    backgrounds[Math.round((mono - range.min) * N / range.max)] = `rgba(0,0,0,${mono})`;
+    backgrounds[Math.round((mono - range.min) * N / range.max)] = `rgba(${BASE},${mono})`;
   chart.data.datasets[0].backgroundColor = backgrounds;
   return backgrounds;
 };
@@ -66,16 +65,20 @@ $(document).ready(() => {
       datasets: [{
         label: '№	of Votes',
         data: [],
-        backgroundColor: [],
+        backgroundColor: `rgba(${BASE}, 0.05)`,
       }]
     },
     options: {
       title: {
         display: true,
+        color: '#fff',
         text: 'Distribution of alternative/other votes.'
       },
       scales: {
         yAxes: [{
+          gridLines: {
+            color: `rgba(${BASE}, 0.1)`,
+          },
           categoryPercentage: 0.9,
           barPercentage: 1.0,
           ticks: {
@@ -84,6 +87,9 @@ $(document).ready(() => {
           }
         }],
         xAxes: [{
+          gridLines: {
+            color: `rgba(${BASE}, 0.1)`,
+          },
           ticks: {
             stepSize: 1
           }

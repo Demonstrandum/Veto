@@ -4,6 +4,7 @@
 # Shh, web stuff
 tmp/
 log/
+.env*
 
 ## System and release files ##
 # OS files
