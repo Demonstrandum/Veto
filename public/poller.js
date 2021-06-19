@@ -9,6 +9,7 @@ const dp = (number, places = 2) =>
 const BASE = getVarCSS('fg-rgb');
 Chart.defaults.global.elements.arc.borderColor = `rgba(${BASE},0.1)`;
 Chart.defaults.global.defaultColor = `rgba(${BASE},0.1)`;
+Chart.defaults.global.defaultFontFamily = getVarCSS('body-font');
 
 const POLL_CODE = window.location.pathname.split('/').slice(-1);
 

@@ -42,6 +42,8 @@ class String
   end
 end
 
+DESC = "Create real time straw polls. " +
+       "Easy to use, Free and Open Source Software."
 HEAD_TAGS = <<-HTML
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -57,20 +59,20 @@ HEAD_TAGS = <<-HTML
   </script>
 
   <!-- Search Engine -->
-  <meta name="description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="description" content="#{DESC}">
   <meta name="image" content="https://veto.vote/square.png">
   <!-- Schema.org for Google -->
   <meta itemprop="name" content="Veto Vote — Straw Polls">
-  <meta itemprop="description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta itemprop="description" content="#{DESC}">
   <meta itemprop="image" content="https://veto.vote/square.png">
   <!-- Twitter -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Veto Vote — Straw Polls">
-  <meta name="twitter:description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="twitter:description" content="#{DESC}">
   <meta name="twitter:image:src" content="https://veto.vote/square.png">
   <!-- Open Graph general (Facebook, Pinterest & Google+) -->
   <meta name="og:title" content="Veto Vote — Straw Polls">
-  <meta name="og:description" content="Create a real time straw poll with veto.vote. Easy to use, completely free with graphs and statistics already provided.">
+  <meta name="og:description" content="#{DESC}">
   <meta name="og:image" content="https://veto.vote/card.png">
   <meta name="og:url" content="https://veto.vote/">
   <meta name="og:site_name" content="Veto Vote — Straw Polls">

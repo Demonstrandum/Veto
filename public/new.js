@@ -1,5 +1,9 @@
 $('document').ready(() => {
-  $('.url').text(`${window.location.host}/poll/`)
+  $('.url').text(`${window.location.host}/poll/`);
+  $('#other').on('change', () =>
+      $('#word-primary').css({
+        display: $('#other').is(':checked') ? 'inline' : 'none'
+      }));
 
   $('#create').submit(() => {
     $.ajax({
@@ -49,8 +53,8 @@ $('document').ready(() => {
     } else if (!$('#other').is(':checked') && Array(...$('#options li span').map((i, e) => e.innerHTML)).length === 0) {
       $('#addition').attr('placeholder', 'Add at least 1 option.').attention();
       issue(ISSUE.WARN, `
-        Unless you allow for 'other' options,
-        you need to add at least one primary option.
+        Unless you allow for alternative voting options,
+        you must add at least one primary option.
       `);
     } else if (polls.includes($('#code').val())) {
       issue(ISSUE.FATAL, `
@@ -105,14 +109,15 @@ const save = () => {
   inputs.each(function() {
     const value = this.value;
     if (value.length === 0) {
-      issue(ISSUE.FATAL, `Cannot leave new value empty. Delete it if you don't want it.`);
-      bad_input = $(this);
-      return;
+      bad_input = 'removed';
+      setTimeout(() =>
+        $(this).parent('li').find('.option-remove').click(), 100);
+      return false;
     }
     if (values.includes(value)) {
       issue(ISSUE.FATAL, `Cannot have duplicate (primary) options/choices!`);
       bad_input = $(this);
-      return;
+      return false;
     }
 
     $(this).parent('li').removeClass('dark-option');
@@ -124,8 +129,9 @@ const save = () => {
   });
 
   if (bad_input !== null) {
-    bad_input.attention();
-    return false;
+    if (bad_input !== 'removed')
+      bad_input.attention();
+    return true;
   }
 
   let value = $("#addition").val().trim();

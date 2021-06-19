@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Veto Vote - Create a Poll</title>
+    <title>Veto Vote — Create a Poll</title>
     <%= head_tags %>
   </head>
   <body>
@@ -22,7 +22,7 @@
 
         <div class="row">
           <div class="three columns">
-            Poll URL name
+            Poll UID
           </div>
           <div class="three columns right">
             <span class="url"><span>
@@ -36,15 +36,14 @@
           <div class="twelve columns" style="margin-bottom: 1em">
             <input type="checkbox" checked id="other" name="other">
             <label for="other" style="cursor: pointer; user-select: none;">
-              Allow 'other' option, i.e. alternative choices?
+              Allow for respondents to write in alternative votes?
             </label>
           </div>
         </div>
 
-
-        <div class="row">
+        <div class="row voting-options">
           <div class="twelve columns">
-            Primary Options/Choices:
+            <span id="word-primary">Primary </span>Voting Options:
             <ul id="options">
               <div class="option">
                 <input type="text" autocomplete="off" name="addition" id="addition" placeholder="...">

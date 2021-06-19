@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,500');
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
 :root {
+  --fallback-sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --head-font: 'Rubik', var(--fallback-sans);
+  --body-font: 'Inter', var(--fallback-sans);
+  --mono-font: monospace;
+  /* Colours for light theme. */
   --bg: #fff;
   --fg: #000;
   --bg-rgb: 255, 255, 255;
@@ -9,6 +15,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Colours for dark theme */
     --bg: #090909;
     --fg: #fff;
     --bg-rgb: 009, 009, 009;
@@ -25,7 +32,7 @@ html, body {
   padding: 0;
   font-size: 16px;
   min-height: 100vh;
-  font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family: var(--body-font);
   color: var(--fg);
   background: var(--bg);
   overflow-x: hidden;
@@ -78,18 +85,13 @@ ul {
 #options li input {
   background: var(--fg);
   color: var(--bg);
-  border-bottom: 2px solid #222;
+  border-bottom: 2px solid rgba(var(--bg-rgb), 0.2);
   padding: 0 5px;
   margin: 0;
   display: inline-block;
   height: 1.6em;
   line-height: 0px;
   margin: 0;
-  border-radius: 2px;
-}
-
-#options li:nth-of-type(2n) {
-  background: rgba(var(--fg-rgb), 0.8);
 }
 
 #options li:hover {
@@ -130,20 +132,19 @@ label {
 
 input[type=submit] {
   font-weight: normal;
-  border-color: #000;
+  border-color: rgba(var(--fg-bg), 0.1);
   color: var(--bg);
   background: var(--fg);
   transition: all .1s ease;
 }
 
 input[type=submit]:hover {
-  background: #1a1a1a;
-  color: #ddd;
+  background: rgba(var(--fg-rgb), 0.1);
+  color: rgba(var(--fg-rgb), 0.6);
 }
 
 input[type=submit]:active {
-  background: #555;
-  color: #888;
+  background: rgba(var(--fg-rgb), 0.5);
 }
 
 input[type=button], button {
@@ -151,7 +152,7 @@ input[type=button], button {
   margin: 0 15px;
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.1);
   height: 36px;
   letter-spacing: normal;
   font-weight: normal;
@@ -164,14 +165,14 @@ input[type=text] {
   padding: 0;
   border: none;
   border-radius: 0px;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.1);
   transition: all .15s ease;
 }
 
 input[type=text]:focus {
   outline: none;
   border: none;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.1);
 }
 
 input[type=checkbox] { display:none; }
@@ -179,6 +180,8 @@ input[type=checkbox] + label:before {
   display: inline-block;
   font-style: normal;
   font-variant: normal;
+  font-size: 1.3em;
+  vertical-align: middle;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
 }
@@ -196,7 +199,8 @@ input[type=checkbox]:checked + label:before {
 }
 
 #code {
-  color: #aaa;
+  font-family: var(--mono-font);
+  color: rgba(var(--fg-rgb), 0.6);
 }
 
 .problem:focus {
@@ -206,6 +210,7 @@ input[type=checkbox]:checked + label:before {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--head-font);
   font-weight: 500;
   color: var(--fg);
 }
@@ -269,10 +274,26 @@ footer span {
 }
 
 .url {
+  font-family: var(--mono-font);
   word-break: break-all;
   display: block;
   font-size: 1em;
-  color: #aaa;
+  color: rgba(var(--fg-rgb), 0.6);
+}
+
+.voting-options {
+  border-left-width: 0.5em;
+  border-left-style: solid;
+  border-image: linear-gradient(to bottom,
+    rgba(var(--fg-rgb), 0.20)  0%,
+    rgba(var(--fg-rgb), 0.14) 11%,
+    rgba(var(--fg-rgb), 0.12) 28%,
+    rgba(var(--fg-rgb), 0.10) 43%,
+    rgba(var(--fg-rgb), 0.06) 57%,
+    rgba(var(--fg-rgb), 0.03) 75%,
+    rgba(var(--fg-rgb), 0.01) 90%,
+    rgba(var(--fg-rgb), 0.00) 100%) 1 100%;
+  padding-left: 1em;
 }
 
 .issues {

@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <title>404 - Veto Vote</title>
+    <title>404 — Veto Vote</title>
     <%= head_tags %>
     <style media="screen">
-      @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
-
       .container {
         width: 24em;
       }
-
       .container p:nth-of-type(2) {
         color: #555;
       }
@@ -20,8 +17,10 @@
         text-align: center;
       }
       h3 span {
-        font-family: 'Roboto Mono', monospace;
+        font-family: var(--mono-font);
       }
+      a { color: #666; }
+      a:hover { color: #555; }
     </style>
   </head>
   <body>
@@ -30,7 +29,7 @@
       <h2>That's a 404.</h2>
 
       <h3>
-        <span>`<%= request.url.split('//')[-1] %>'</span>
+        <span>« /poll/<%= request.url.split('/')[-1] %> »</span>
         <br />
         does not exist.
       </h3>
@@ -41,7 +40,7 @@
       <p>
         If you believe this link should be correct, and the webservice is
         at fault, please email me
-        at <u>moi@knutsen.co</u> with deatils of the problem.
+        at <a href="mailto:admin@knutsen.co">admin@knutsen.co</a> with deatils of the problem.
       </p>
     </div>
   </body>
